@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Park;
+
 namespace Interactions
 {
     public class Character
@@ -33,6 +35,13 @@ namespace Interactions
                 Console.WriteLine("I don't know how to do that...");
             }
 
+        }
+
+        public void Attacked(int pointsLost){
+            Health = Health - pointsLost;
+            if(Health < 0){
+                Program.EndGame();
+            }
         }
 
         public void AddItem (string item){
