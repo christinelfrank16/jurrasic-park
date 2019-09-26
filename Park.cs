@@ -78,7 +78,7 @@ namespace Park
             bool directionSelected = false;
             while (!directionSelected)
             {
-                Console.WriteLine("What do you want to do? [Heal, Heal Party, Map, Move]");
+                Console.WriteLine("What do you want to do? [Heal, Heal Party, Map, Move, Search]");
                 string action = Console.ReadLine().ToLower();
                 if(action == "move")
                 {
@@ -112,6 +112,24 @@ namespace Park
                 else if (action == "map")
                 {
                     ShowMap(currentLocation, map);
+                }
+                else if (action == "search")
+                {
+                    Console.WriteLine("You search the area...");
+                    if(currentLocation.Item != ""){
+                        party.GroupMembers[0].AddItem(currentLocation.Item);
+                        currentLocation.Item = "";
+                    }
+                    else 
+                    {
+                        Random rnd = new Random();
+                        int diceRoll = rnd.Next(0,2);
+                        if(diceRoll != 0){
+                            Place.RandomDinoAttack(party);
+                        } else {
+                            Console.WriteLine("You find nothing of value.");
+                        }
+                    }
                 }
 
             }

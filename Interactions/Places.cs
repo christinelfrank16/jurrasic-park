@@ -7,7 +7,7 @@ namespace Interactions
     {
         public string Name { get; private set; }
         public int[] Coordinates { get; private set; }
-        public string Item { get; private set; }
+        public string Item { get; set; }
         public bool IsEndLocation { get; private set; }
         public List<Scenario> Scenarios { get; set; }
         public int VisitCount { get; set; }
