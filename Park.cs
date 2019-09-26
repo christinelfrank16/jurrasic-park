@@ -21,9 +21,10 @@ namespace Park
             while(!gameOver){
                 Place.VisitorCenterEvents(visitorLocation, party, characters);
                 // Other Event "Listeners"
-                UserDirection(party, map, visitorLocation);
+                visitorLocation = UserDirection(party, map, visitorLocation);
+                gameOver = CheckForEnd(visitor);
             }
-
+            EndGame();
 
         }
 
@@ -72,7 +73,7 @@ namespace Park
             Console.WriteLine("");
         }
 
-        public static void UserDirection(Party party, Map map, Place currentLocation)
+        public static Place UserDirection(Party party, Map map, Place currentLocation)
         {
             bool directionSelected = false;
             while (!directionSelected)
@@ -132,6 +133,7 @@ namespace Park
                     Console.WriteLine("Not a valid location direction. Please retry.");
                 }
             }
+            return currentLocation;
         }
 
         public static Place Move(string letter, List<Place> moveOptions, Place currentLocation)
@@ -157,8 +159,8 @@ namespace Park
                 nextX = currX + 1;
             }
 
-            nextX = nextX > 0 ? nextX : currX;
-            nextY = nextY > 0 ? nextY : currY;
+            nextX = nextX >= 0 ? nextX : currX;
+            nextY = nextY >= 0 ? nextY : currY;
 
             Place next = moveOptions.Find(place => place.Coordinates[0] == nextX && place.Coordinates[1] == nextY);
             return next; 
@@ -204,6 +206,7 @@ namespace Park
             Console.WriteLine(line);
             List<Place> options = currentLocation.MoveOptions(map);
             string optionString = "";
+            Console.WriteLine("You are currently at: " + currentLocation.Name);
             foreach (Place option in options)
             {
                 optionString += option.Name + " ";
@@ -211,6 +214,13 @@ namespace Park
             Console.WriteLine("You can move to: " + optionString);
         }
 
+        public static bool CheckForEnd(Character visitor){
+            bool gameOver = false;
+            if(visitor.Health < 0){
+                gameOver = true;
+            }
+            return gameOver;
+        }
         public static void EndGame()
         {
             Console.WriteLine("You valiantly tried to escape the park, but dinosaurs proved to be cunning adversaries. Hopefully there were some survivors to tell your tale.");

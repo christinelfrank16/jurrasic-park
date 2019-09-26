@@ -39,9 +39,6 @@ namespace Interactions
 
         public void Attacked(int pointsLost){
             Health = Health - pointsLost;
-            if(Health < 0){
-                Program.EndGame();
-            }
         }
 
         public void AddItem (string item){
