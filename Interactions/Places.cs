@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using System.Threading;
 
 namespace Interactions
 {
@@ -270,6 +271,33 @@ namespace Interactions
                     Console.WriteLine("You toss the keys to Taylor as you all dive into the boat. The engine fires up while swarms of dinosaurs surge onto the beach.");
                     Console.WriteLine("The engine stalls. Your heart races as the danger surrounds you.");
                     Console.WriteLine("Just as you start to see the dinosaurs' pupils, you feel the movement of the boat shift and the coast begins to fade into the distance. You and your party exhale for the first time since the dinosaurs escaped.");
+                }
+                else
+                {
+                    Console.WriteLine("The boat dock has an excellent view. You see a boat staged and waiting, but no one is around and you don't find any keys.");
+
+                    if (currentLocation.VisitCount > 1)
+                    {
+                        RandomDinoAttack(party, new string[0]);
+                    }
+                }
+            }
+        }
+
+        public static void HeliPadEvents(Place currentLocation, Party party)
+        {
+            if (currentLocation.Name == "Heli Pad")
+            {
+                currentLocation.VisitCount++;
+                if (currentLocation.CanLeave(party))
+                {
+                    Console.WriteLine("You frantically search your pockets for keys. With a sigh of relief you pull out the helicoptor keys you found in the velociraptor pen - you shudder in remembrance.");
+                    Console.WriteLine("You toss the keys to Ryan as you all leap into the coptor. The engine misfires while swarms of dinosaurs swarm onto the clearing.");
+                    Console.WriteLine("The engine comes up, jerking you out of the helicopter. It rises without you.");
+                    Console.WriteLine("Ryan tilts the helicopter and a rope ladder falls towards you. You barely grasp hold and are lifted away as the maw of the T-Rex closes behind you. On your backpack!");
+                    Console.WriteLine("You are pulled down, towards the mass of dinosaurs..");
+                    Thread.Sleep(2000);
+                    Console.WriteLine("Your backpack rips away and you scramble up the ladder for to safety. You and your party exhale for the first time since the dinosaurs escaped.");
                 }
                 else
                 {
