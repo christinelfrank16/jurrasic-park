@@ -24,6 +24,7 @@ namespace Park
                 Place.UtilityBunkerEvents(visitorLocation, party, characters);
                 Place.RadioStationEvents(visitorLocation, party);
                 Place.HerbivorePenEvents(visitorLocation, party, characters);
+                Place.ParkOperationsEvents(visitorLocation, party, characters);
                 Place.BoatDockEvents(visitorLocation, party);
                 Place.HeliPadEvents(visitorLocation, party);
                 // Other Event "Listeners"

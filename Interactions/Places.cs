@@ -172,8 +172,6 @@ namespace Interactions
             if (currentLocation.Name == "Herbivore Pen")
             {
                 currentLocation.VisitCount++;
-                // Scenario herbPenIntro = new Scenario("This is the herbivore pen. It should be safer.", "", "", "", "");
-                // Scenario plantAttack = new Scenario("You brushed against a poisonous plant and have a painful rash.", "Biologist", "");
 
                 if (currentLocation.VisitCount == 1)
                 {
@@ -223,6 +221,60 @@ namespace Interactions
                     else
                     {
                         Console.WriteLine("You can't see anything of value in your immediate vicinity.");
+                    }
+                }
+                else
+                {
+                    RandomDinoAttack(party, new string[0]);
+                    if (currentLocation.Item.Count > 1)
+                    {
+                        Console.WriteLine("There is something about this place... Something out of place...");
+                    }
+                }
+            }
+        }
+
+        public static void ParkOperationsEvents(Place currentLocation, Party party, List<Character> characters)
+        {
+            if (currentLocation.Name == "Park Operations")
+            {
+                currentLocation.VisitCount++;
+
+                if (currentLocation.VisitCount == 1)
+                {
+                    Console.WriteLine("You enter the park operations center. You see someone on the other side of a stegasaurus. Do you get closer? [Y/N]");
+                    string getCloser = Console.ReadLine().ToLower();
+                    if (getCloser == "y")
+                    {
+                        Console.WriteLine("You meet the local doctor and pseudo dino-vet, Sam. They are caring for the big stegasaurus and say you can pat it if you want to. Do you? [Y/N]");
+                        string patDino = Console.ReadLine().ToLower();
+                        if (patDino == "y")
+                        {
+                            Console.WriteLine("You moved too quickly and startled it! It swings its spiked tail at you!.");
+                            Character bobby = party.GroupMembers.Find(person => person.Name == "Bobby");
+                            if (bobby != null)
+                            {
+                                Console.WriteLine("You duck but Bobby was too slow and was mauled!");
+                                bobby.Attacked(1);
+                            }
+                            else
+                            {
+                                Console.WriteLine("You try to duck but were too slow!");
+                                party.GroupMembers[0].Attacked(1);
+                            }
+                                Console.WriteLine("Sam takes pity on you and joins your group in case you need future help.");
+                                party.GroupMembers.Add(characters.Find(person => person.Name == "Sam"));
+                        }
+                        else
+                        {
+                            Console.WriteLine("Sam appreciates your caution and decides to join your group.");
+                        }
+                    }
+                    else if (getCloser == "n")
+                    {
+                        Console.WriteLine("You move on...");
+                        RandomDinoAttack(party, new string[0]);
+                        Character.CharDropItem(characters.Find(person => person.Name == "Sydney"), currentLocation);
                     }
                 }
                 else
@@ -301,7 +353,7 @@ namespace Interactions
                 }
                 else
                 {
-                    Console.WriteLine("The boat dock has an excellent view. You see a boat staged and waiting, but no one is around and you don't find any keys.");
+                    Console.WriteLine("A waiting helicoptor... Looks like it's ready to go, but you don't see any keys.");
 
                     if (currentLocation.VisitCount > 1)
                     {
@@ -406,7 +458,6 @@ namespace Interactions
             // Scenario raptor = new Scenario("The velociraptors have surrounded you!", "", "Paleontologist", "Devan becomes the Alpha Raptor and sneaks you out of the surrounding raptor pack. You find the Pilot and add them to your party.", "You had found the Pilot, but they sacrificed themselves by running first.");
             // Scenario tRexIntro = new Scenario("T-Rex are known as the King of Dinosaurs. Did you know they can't see you if you don't move?", "", "", "", "");
             // Scenario tRex = new Scenario("You must have eaten recently, the T-Rex smelled you and is coming this way!", "Red Shirt", "", "Devan told you to throw your Red Shirt to distract the T-Rex. It worked! The Paleontologist joins your party.", "You stood still thinking the T-Rex wouldn't see you. Unfortunately your scent betrayed your location, you were bitten but Devan saved you. The Paleontologist joins your party.");
-            // Scenario heliIntro = new Scenario("A waiting helicoptor... Looks like it's ready to go, but you don't see any keys.", "", "", "", "");
 
 
             Place visitorCenter = new Place("Visitor Center", 2, 0, "", false, new List<Scenario>(){});
