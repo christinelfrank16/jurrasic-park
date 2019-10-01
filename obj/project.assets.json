@@ -692,11 +692,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Guest/Desktop/JurrasicPark/Park.csproj",
+      "projectUniqueName": "/Users/Guest/Desktop/jurrasic-park/Park.csproj",
       "projectName": "Park",
-      "projectPath": "/Users/Guest/Desktop/JurrasicPark/Park.csproj",
+      "projectPath": "/Users/Guest/Desktop/jurrasic-park/Park.csproj",
       "packagesPath": "/Users/Guest/.nuget/packages/",
-      "outputPath": "/Users/Guest/Desktop/JurrasicPark/obj/",
+      "outputPath": "/Users/Guest/Desktop/jurrasic-park/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"

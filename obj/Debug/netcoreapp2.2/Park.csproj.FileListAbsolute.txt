@@ -9,3 +9,14 @@
 /Users/Guest/Desktop/JurrasicPark/obj/Debug/netcoreapp2.2/Park.AssemblyInfo.cs
 /Users/Guest/Desktop/JurrasicPark/obj/Debug/netcoreapp2.2/Park.dll
 /Users/Guest/Desktop/JurrasicPark/obj/Debug/netcoreapp2.2/Park.pdb
+/Users/Guest/Desktop/jurrasic-park/bin/Debug/netcoreapp2.2/Park.deps.json
+/Users/Guest/Desktop/jurrasic-park/bin/Debug/netcoreapp2.2/Park.runtimeconfig.json
+/Users/Guest/Desktop/jurrasic-park/bin/Debug/netcoreapp2.2/Park.runtimeconfig.dev.json
+/Users/Guest/Desktop/jurrasic-park/bin/Debug/netcoreapp2.2/Park.dll
+/Users/Guest/Desktop/jurrasic-park/bin/Debug/netcoreapp2.2/Park.pdb
+/Users/Guest/Desktop/jurrasic-park/obj/Debug/netcoreapp2.2/Park.csprojAssemblyReference.cache
+/Users/Guest/Desktop/jurrasic-park/obj/Debug/netcoreapp2.2/Park.csproj.CoreCompileInputs.cache
+/Users/Guest/Desktop/jurrasic-park/obj/Debug/netcoreapp2.2/Park.AssemblyInfoInputs.cache
+/Users/Guest/Desktop/jurrasic-park/obj/Debug/netcoreapp2.2/Park.AssemblyInfo.cs
+/Users/Guest/Desktop/jurrasic-park/obj/Debug/netcoreapp2.2/Park.dll
+/Users/Guest/Desktop/jurrasic-park/obj/Debug/netcoreapp2.2/Park.pdb

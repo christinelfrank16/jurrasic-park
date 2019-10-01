@@ -123,7 +123,7 @@ namespace Park
                     else 
                     {
                         Random rnd = new Random();
-                        int diceRoll = rnd.Next(0,2);
+                        int diceRoll = rnd.Next(0,3);
                         if(diceRoll != 0){
                             Place.RandomDinoAttack(party);
                         } else {
