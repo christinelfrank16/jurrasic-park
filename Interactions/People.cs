@@ -45,6 +45,20 @@ namespace Interactions
             Backpack.Add(item);
         }
 
+        public void CharGiveItem(Character character)
+        {
+            string item = character.Backpack[0];
+            character.Backpack.Remove(item);
+            AddItem(item);
+        }
+
+        public static void CharDropItem(Character character, Place place)
+        {
+            string item = character.Backpack[0];
+            character.Backpack.Remove(item);
+            
+        }
+
         public static List<Character> CreateCharacters()
         {
             Character pilot = new Character("Ryan", "Pilot", "");

@@ -116,9 +116,11 @@ namespace Park
                 else if (action == "search")
                 {
                     Console.WriteLine("You search the area...");
-                    if(currentLocation.Item != ""){
-                        party.GroupMembers[0].AddItem(currentLocation.Item);
-                        currentLocation.Item = "";
+                    if(currentLocation.Item[0] != ""){
+                        party.GroupMembers[0].AddItem(currentLocation.Item[0]);
+                        Console.WriteLine("You found something important: " + currentLocation.Item[0] + "!");
+                        currentLocation.Item.Remove(currentLocation.Item[0]);
+                        currentLocation.Item.Add("");
                     }
                     else 
                     {
@@ -131,6 +133,7 @@ namespace Park
                         }
                     }
                 }
+                //                            Console.WriteLine(string.Join("," , party.GroupMembers[0].Backpack.ToArray()));
 
             }
             bool validDirection = false;

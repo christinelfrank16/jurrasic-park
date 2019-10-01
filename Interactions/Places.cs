@@ -7,7 +7,7 @@ namespace Interactions
     {
         public string Name { get; private set; }
         public int[] Coordinates { get; private set; }
-        public string Item { get; set; }
+        public List<string> Item { get; set; }
         public bool IsEndLocation { get; private set; }
         public List<Scenario> Scenarios { get; set; }
         public int VisitCount { get; set; }
@@ -16,7 +16,7 @@ namespace Interactions
         {
             Name = name;
             Coordinates = new int[]{xCoord, yCoord};
-            Item = item;
+            Item = new List<string>(){item};
             IsEndLocation = isEnd;
             Scenarios = scenarios;
             VisitCount = 0;
@@ -85,15 +85,18 @@ namespace Interactions
                         {
                             Console.WriteLine("You save Andy! They are grateful to you and join your group.");
                             party.GroupMembers.Add(characters.Find(person => person.Name == "Andy"));
+                            party.GroupMembers[0].CharGiveItem(characters.Find(person => person.Name == "Andy"));
                         }
                         else
                         {
                             Console.WriteLine("Andy survived without your help. But they don't like you and will not join your group. You're on your own.");
+                            Character.CharDropItem(characters.Find(person => person.Name == "Andy"), currentLocation);
                         }
                     }
                     else if (watch == "n")
                     {
                         Console.WriteLine("You move on...");
+                        Character.CharDropItem(characters.Find(person => person.Name == "Andy"), currentLocation);
                     }
                 } 
                 else 
@@ -104,6 +107,97 @@ namespace Interactions
             }
 
         }
+
+        public static void UtilityBunkerEvents(Place currentLocation, Party party, List<Character> characters)
+        {
+            if (currentLocation.Name == "Utilities Bunker")
+            {
+                currentLocation.VisitCount++;
+
+                if (currentLocation.VisitCount == 1)
+                {
+                    Console.WriteLine("There was a power surge! The utility bunker is super dark, but you hear a rustle in the bushes behind you.");
+                    Console.WriteLine("Do you run into the bunker? (Y/N)");
+                    string enterBunker = Console.ReadLine().ToLower();
+                    if (enterBunker == "y")
+                    {
+                        Console.WriteLine("A large flock of Compsognathus has surged into the room behind you! You struggle to find your way in the dark.");
+                        bool haveFlashlight = party.GroupMembers[0].Backpack.Contains("flashlight");
+                        if(haveFlashlight)
+                        {
+                            Console.WriteLine("You pull out your flashlight and run to the back room of the bunker, slamming the thick steel door.");
+                            Console.WriteLine("You find the park owner, Sydney, huddling in a corner. Do you approach them? [Y/N]");
+                            string help = Console.ReadLine().ToLower();
+                            if (help == "y")
+                            {
+                                Console.WriteLine("You make Sydney feel safer! They are grateful to you and join your group.");
+                                party.GroupMembers.Add(characters.Find(person => person.Name == "Sydney"));
+                                party.GroupMembers[0].CharGiveItem(characters.Find(person => person.Name == "Sydney"));
+                            }
+                            else
+                            {
+                                Console.WriteLine("You huddle in your own corner and wait out the dinosaurs. Sydney's fright overcomes them and they run into the black abyss.");
+                                Console.WriteLine("You think you hear something clink as they leave.");
+                                Character.CharDropItem(characters.Find(person => person.Name == "Sydney"), currentLocation);
+                            }
+                        }
+                        else{
+
+                        }
+                    }
+                    else if (enterBunker == "n")
+                    {
+                        Console.WriteLine("You move on... But you hear footsteps behind you.");
+                        RandomDinoAttack(party);
+                        Character.CharDropItem(characters.Find(person => person.Name == "Sydney"), currentLocation);
+                    }
+                }
+                else
+                {
+                    RandomDinoAttack(party);
+                    if(currentLocation.Item.Count > 1){
+                        Console.WriteLine("There is something about this place... Something out of place...");
+                    }
+                }
+            }
+        }
+
+        // public static void PathEvents(Place currentLocation, Party party, List<Character> characters)
+        // {
+        //     if (currentLocation.Name.Contains("Path"))
+        //     {
+        //         currentLocation.VisitCount++;
+
+        //         if (currentLocation.VisitCount == 1)
+        //         {
+        //             Console.WriteLine("You see Andy watching TV. Want to see what he's watching? (Y/N)");
+        //             string watch = Console.ReadLine().ToLower();
+        //             if (watch == "y")
+        //             {
+        //                 Console.WriteLine("Oh no! It showed a dinosaur escaping from its pen and startled Andy. Now they're choking!");
+        //                 Console.WriteLine("Do you help Andy? (Y/N)");
+        //                 string help = Console.ReadLine().ToLower();
+        //                 if (help == "y")
+        //                 {
+        //                     Console.WriteLine("You save Andy! They are grateful to you and join your group.");
+        //                     party.GroupMembers.Add(characters.Find(person => person.Name == "Andy"));
+        //                 }
+        //                 else
+        //                 {
+        //                     Console.WriteLine("Andy survived without your help. But they don't like you and will not join your group. You're on your own.");
+        //                 }
+        //             }
+        //             else if (watch == "n")
+        //             {
+        //                 Console.WriteLine("You move on...");
+        //             }
+        //         }
+        //         else
+        //         {
+        //             RandomDinoAttack(party);
+        //         }
+        //     }
+        // }
 
 
         public static void RandomDinoAttack(Party party)
@@ -173,7 +267,7 @@ namespace Interactions
             Place heliPad = new Place("Heli Pad", 0, 2, "", true, new List<Scenario>() {});
             Place boatDock = new Place("Boat Dock", 4,2, "", true, new List<Scenario>() {});
             Place hamRadioStation = new Place("HAM Radio Station", 2, 4, "", true, new List<Scenario>() {});
-            Place foodPlaza = new Place("Food Plaza", 2, 1, "", false, new List<Scenario>(){});
+            Place foodPlaza = new Place("Food Plaza", 2, 1, "unidentifiable remains", false, new List<Scenario>(){});
             Place parkOp = new Place("Park Operations", 3, 1, "helicopter keys", false, new List<Scenario>() {});
             Place raptorPen = new Place("Velociraptor Pen", 1, 1, "", false, new List<Scenario>() {});
             Place tRexPen = new Place("T-Rex Pen", 3, 3, "", false, new List<Scenario>() {});
@@ -181,7 +275,7 @@ namespace Interactions
             Place utilities = new Place("Utilities Bunker", 1, 3, "boat keys", false, new List<Scenario>() {});
             Place pathWest = new Place("Path West", 1, 2,"", false, new List<Scenario>(){});
             Place pathCenter = new Place("Path Center", 2, 2,"", false, new List<Scenario>(){});
-            Place pathEast = new Place("Path East", 3, 2, "", false, new List<Scenario>() { });
+            Place pathEast = new Place("Path East", 3, 2, "garbage", false, new List<Scenario>() { });
 
             List<Place> locations = new List<Place>(){visitorCenter, heliPad, boatDock, hamRadioStation, foodPlaza, parkOp, raptorPen, tRexPen, herbivorePen, utilities, pathCenter, pathWest, pathEast};
 
