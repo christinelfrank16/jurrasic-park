@@ -259,6 +259,30 @@ namespace Interactions
             }
         }
 
+        public static void BoatDockEvents(Place currentLocation, Party party)
+        {
+            if (currentLocation.Name == "Boat Dock")
+            {
+                currentLocation.VisitCount++;
+                if (currentLocation.CanLeave(party))
+                {
+                    Console.WriteLine("You frantically search your pockets for keys. With a sigh of relief you pull out the boat keys you found in the utility bunker.");
+                    Console.WriteLine("You toss the keys to Taylor as you all dive into the boat. The engine fires up while swarms of dinosaurs surge onto the beach.");
+                    Console.WriteLine("The engine stalls. Your heart races as the danger surrounds you.");
+                    Console.WriteLine("Just as you start to see the dinosaurs' pupils, you feel the movement of the boat shift and the coast begins to fade into the distance. You and your party exhale for the first time since the dinosaurs escaped.");
+                }
+                else
+                {
+                    Console.WriteLine("The boat dock has an excellent view. You see a boat staged and waiting, but no one is around and you don't find any keys.");
+
+                    if (currentLocation.VisitCount > 1)
+                    {
+                        RandomDinoAttack(party, new string[0]);
+                    }
+                }
+            }
+        }
+
         // public static void PathEvents(Place currentLocation, Party party, List<Character> characters)
         // {
         //     if (currentLocation.Name.Contains("Path"))
@@ -354,10 +378,8 @@ namespace Interactions
             // Scenario raptor = new Scenario("The velociraptors have surrounded you!", "", "Paleontologist", "Devan becomes the Alpha Raptor and sneaks you out of the surrounding raptor pack. You find the Pilot and add them to your party.", "You had found the Pilot, but they sacrificed themselves by running first.");
             // Scenario tRexIntro = new Scenario("T-Rex are known as the King of Dinosaurs. Did you know they can't see you if you don't move?", "", "", "", "");
             // Scenario tRex = new Scenario("You must have eaten recently, the T-Rex smelled you and is coming this way!", "Red Shirt", "", "Devan told you to throw your Red Shirt to distract the T-Rex. It worked! The Paleontologist joins your party.", "You stood still thinking the T-Rex wouldn't see you. Unfortunately your scent betrayed your location, you were bitten but Devan saved you. The Paleontologist joins your party.");
-            // Scenario herbPenIntro = new Scenario("This is the herbivore pen. It should be safer.", "", "", "", "");
-            // Scenario plantAttack = new Scenario("You brushed against a poisonous plant and have a painful rash.", "Biologist", "");
             // Scenario heliIntro = new Scenario("A waiting helicoptor... Looks like it's ready to go, but you don't see any keys.", "", "", "", "");
-            // Scenario boatIntro = new Scenario("The boat dock has an excellent view. You see a boat staged and waiting, but no one is around and you don't find any keys.", "", "", "", "");
+
 
             Place visitorCenter = new Place("Visitor Center", 2, 0, "", false, new List<Scenario>(){});
             Place heliPad = new Place("Heli Pad", 0, 2, "", true, new List<Scenario>() {});
