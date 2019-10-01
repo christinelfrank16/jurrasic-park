@@ -56,7 +56,14 @@ namespace Interactions
         {
             string item = character.Backpack[0];
             character.Backpack.Remove(item);
-            
+            if(place.Item[0] == "")
+            {
+                place.Item[0] = item;
+            }
+            else
+            {
+                place.Item.Add(item);
+            }
         }
 
         public static List<Character> CreateCharacters()

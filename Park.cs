@@ -15,16 +15,27 @@ namespace Park
             List<Character> characters = Character.CreateCharacters();
             Place visitorLocation = map.Locations.Find(location => location.Name == "Visitor Center");
             bool gameOver = false;
+            bool isVictorious = false;
             Character visitor = Welcome();
             party.AddCharacter(visitor);
             Intro();
             while(!gameOver){
                 Place.VisitorCenterEvents(visitorLocation, party, characters);
+                Place.UtilityBunkerEvents(visitorLocation, party, characters);
+                Place.RadioStationEvents(visitorLocation, party);
                 // Other Event "Listeners"
-                visitorLocation = UserDirection(party, map, visitorLocation);
-                gameOver = CheckForEnd(visitor);
+                gameOver = visitorLocation.CanLeave(party);
+                if(!gameOver)
+                {
+                    visitorLocation = UserDirection(party, map, visitorLocation);
+                    gameOver = CheckForEnd(visitor);
+                }
+                else
+                {
+                    isVictorious = true;
+                }
             }
-            EndGame();
+            EndGame(isVictorious);
 
         }
 
@@ -115,22 +126,14 @@ namespace Park
                 }
                 else if (action == "search")
                 {
-                    Console.WriteLine("You search the area...");
-                    if(currentLocation.Item[0] != ""){
-                        party.GroupMembers[0].AddItem(currentLocation.Item[0]);
-                        Console.WriteLine("You found something important: " + currentLocation.Item[0] + "!");
-                        currentLocation.Item.Remove(currentLocation.Item[0]);
-                        currentLocation.Item.Add("");
-                    }
-                    else 
+                    if(!(currentLocation.Name == "Utilities Bunker" && party.GroupMembers[0].Backpack.Contains("flashlight")))
                     {
-                        Random rnd = new Random();
-                        int diceRoll = rnd.Next(0,3);
-                        if(diceRoll != 0){
-                            Place.RandomDinoAttack(party);
-                        } else {
-                            Console.WriteLine("You find nothing of value.");
-                        }
+                        Search(currentLocation, party);
+                    }
+                    else
+                    {
+                        Console.WriteLine("It's too dark. You can't distinguish anything from the abyss.");
+                        RandomAttack(party);
                     }
                 }
                 //                            Console.WriteLine(string.Join("," , party.GroupMembers[0].Backpack.ToArray()));
@@ -155,6 +158,39 @@ namespace Park
                 }
             }
             return currentLocation;
+        }
+
+        public static void Search(Place currentLocation, Party party)
+        {
+            Console.WriteLine("You search the area...");
+            if (currentLocation.Item[0] != "")
+            {
+                party.GroupMembers[0].AddItem(currentLocation.Item[0]);
+                Console.WriteLine("You found something important: " + currentLocation.Item[0] + "!");
+                currentLocation.Item.Remove(currentLocation.Item[0]);
+                currentLocation.Item.Add("");
+            }
+            else
+            {
+                bool attacked = RandomAttack(party);
+                if (!attacked)
+                {
+                    Console.WriteLine("You find nothing of value.");
+                }
+            }
+        }
+
+        public static bool RandomAttack(Party party)
+        {
+            bool attacked = false;
+            Random rnd = new Random();
+            int diceRoll = rnd.Next(0, 3);
+            if (diceRoll != 0)
+            {
+                Place.RandomDinoAttack(party, new string[0]);
+                attacked = true;
+            }
+            return attacked;
         }
 
         public static Place Move(string letter, List<Place> moveOptions, Place currentLocation)
@@ -242,9 +278,17 @@ namespace Park
             }
             return gameOver;
         }
-        public static void EndGame()
+
+        public static void EndGame(bool isVictorious)
         {
-            Console.WriteLine("You valiantly tried to escape the park, but dinosaurs proved to be cunning adversaries. Hopefully there were some survivors to tell your tale.");
+            if(isVictorious)
+            {
+                Console.WriteLine("Congratulations! You have escaped Jurassic Park!");
+            }
+            else
+            {
+                Console.WriteLine("You valiantly tried to escape the park, but dinosaurs proved to be cunning adversaries. Hopefully there were some survivors to tell your tale.");
+            }
             Console.WriteLine("Do you want to play again?  [Y/N]");
             string playAgain = Console.ReadLine();
             if (playAgain == "Y")

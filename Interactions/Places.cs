@@ -22,13 +22,14 @@ namespace Interactions
             VisitCount = 0;
         }
 
-        public bool CanLeave(List<string> items, List<Character> partyGroup)
+        public bool CanLeave(Party partyGroup)
         {
             bool canLeave = false;
+            List<string> items = partyGroup.GroupMembers[0].Backpack;
             if(IsEndLocation){
-                Character pilot = partyGroup.Find(character => character.Specialty == "Pilot");
-                Character boatOp = partyGroup.Find(character => character.Specialty == "Boat Operator");
-                Character hamRadioOp = partyGroup.Find(character => character.Specialty == "Ham Radio Operator");
+                Character pilot = partyGroup.GroupMembers.Find(character => character.Specialty == "Pilot");
+                Character boatOp = partyGroup.GroupMembers.Find(character => character.Specialty == "Boat Operator");
+                Character hamRadioOp = partyGroup.GroupMembers.Find(character => character.Specialty == "Ham Radio Operator");
 
                 if(Name == "Heli Pad" && (pilot != null && items.Contains("helicopter keys")))
                 {
@@ -97,11 +98,12 @@ namespace Interactions
                     {
                         Console.WriteLine("You move on...");
                         Character.CharDropItem(characters.Find(person => person.Name == "Andy"), currentLocation);
+                        Console.WriteLine(string.Join(",", currentLocation.Item.ToArray()));
                     }
                 } 
                 else 
                 {
-                    RandomDinoAttack(party);
+                    RandomDinoAttack(party, new string[0]);
                 }
 
             }
@@ -142,21 +144,47 @@ namespace Interactions
                             }
                         }
                         else{
-
+                            Console.WriteLine("You stumble around in the dark. Someone screams...");
+                            RandomDinoAttack(party, new string[]{"Compsognathus"});
+                            Character.CharDropItem(characters.Find(person => person.Name == "Sydney"), currentLocation);
                         }
                     }
                     else if (enterBunker == "n")
                     {
                         Console.WriteLine("You move on... But you hear footsteps behind you.");
-                        RandomDinoAttack(party);
+                        RandomDinoAttack(party, new string[0]);
                         Character.CharDropItem(characters.Find(person => person.Name == "Sydney"), currentLocation);
                     }
                 }
                 else
                 {
-                    RandomDinoAttack(party);
+                    RandomDinoAttack(party, new string[0]);
                     if(currentLocation.Item.Count > 1){
                         Console.WriteLine("There is something about this place... Something out of place...");
+                    }
+                }
+            }
+        }
+
+        public static void RadioStationEvents(Place currentLocation, Party party)
+        {
+            if (currentLocation.Name == "HAM Radio Station")
+            {
+                currentLocation.VisitCount++;
+                if(currentLocation.CanLeave(party))
+                {
+                    Console.WriteLine("You frantically search your pockets for keys. With a sigh of relief you pull out the park keys you found in the utility bunker.");
+                    Console.WriteLine("Andy pushes past you into the comms building while you force the door shut just as a velociraptor slams into it. Your shoulder is bruised.");
+                    Console.WriteLine("For what seems like an eternity, the respose to the radio is silent as Andy's calls for help intermingle with the snarls you hear out the door.");
+                    Console.WriteLine("Just as any semblence of hope faded from possibility, a crackle of static comes through. You and your party exhale for the first time since the dinosaurs escaped.");
+                }
+                else
+                {
+                    Console.WriteLine("You enter into the comms tower. This equipment would be really helpful if you knew how to operate the radio and could get into that back room.");
+
+                    if (currentLocation.VisitCount > 1)
+                    {
+                        RandomDinoAttack(party, new string[0]);
                     }
                 }
             }
@@ -200,9 +228,12 @@ namespace Interactions
         // }
 
 
-        public static void RandomDinoAttack(Party party)
+        public static void RandomDinoAttack(Party party, string[] dinoNames)
         {
-            string[] dinoNames = {"T-Rex", "pack of Compys", "velociraptor", "carnotaurus", "utahraptor", "pterodactyl"};
+            if(dinoNames.Length == 0)
+            {
+                dinoNames = new string[]{"T-Rex", "pack of Compys", "velociraptor", "carnotaurus", "utahraptor", "pterodactyl"};
+            }
             Random rnd = new Random();
             int index = rnd.Next(0, dinoNames.Length);
             Console.WriteLine("You are visciously attacked by a " + dinoNames[index] + "! Do you attack or try to run?! (A/R)");
@@ -246,8 +277,7 @@ namespace Interactions
 
 
         public static List<Place> CreateLocations(){
-            // Scenario introduction = new Scenario("Move around the park and have fun. Keep an eye out for special events!", "", "", "", "");
-            // Scenario saveAndy = new Scenario("Let's see what Andy is watching on TV.. Oh no! It showed a dinosaur escaping from its pen and startled Andy. Now they're choking!", "", "", "", "");
+
             // Scenario parkOpIntro = new Scenario("A big stegasaurus is being cared for by Sam; it fought with another stegasaurus and lost and needed help. It's nice, you can pet it if you want to.", "", "", "", "");
             // Scenario stegasaurus = new Scenario("You moved too quickly and startled it! It swings its spiked tail at you!", "", "Visitor", "", "");
             // Scenario raptorPenIntroNoPaleo = new Scenario("This is the raptor pen.. You hear snarles from inside. Are you sure you want to go in?", "", "", "", "");
@@ -257,8 +287,6 @@ namespace Interactions
             // Scenario tRex = new Scenario("You must have eaten recently, the T-Rex smelled you and is coming this way!", "Red Shirt", "", "Devan told you to throw your Red Shirt to distract the T-Rex. It worked! The Paleontologist joins your party.", "You stood still thinking the T-Rex wouldn't see you. Unfortunately your scent betrayed your location, you were bitten but Devan saved you. The Paleontologist joins your party.");
             // Scenario herbPenIntro = new Scenario("This is the herbivore pen. It should be safer.", "", "", "", "");
             // Scenario plantAttack = new Scenario("You brushed against a poisonous plant and have a painful rash.", "Biologist", "");
-            // Scenario utilityIntro = new Scenario("There was a power surge! The utility bunker is super dark, but you hear a rustle in the bushes behind you.", "", "", "", "");
-            // Scenario compys = new Scenario("A large flock of Compsognathus has surged into the room behind you! You struggle to find your way in the dark.", "flashlight", "");
             // Scenario heliIntro = new Scenario("A waiting helicoptor... Looks like it's ready to go, but you don't see any keys.", "", "", "", "");
             // Scenario boatIntro = new Scenario("The boat dock has an excellent view. You see a boat staged and waiting, but no one is around and you don't find any keys.", "", "", "", "");
             // Scenario hamIntro = new Scenario("A special room to contact the outside world, but it's locked. You need park keys to get in.", "", "", "", "");
