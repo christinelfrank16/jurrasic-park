@@ -363,42 +363,33 @@ namespace Interactions
             }
         }
 
-        // public static void PathEvents(Place currentLocation, Party party, List<Character> characters)
-        // {
-        //     if (currentLocation.Name.Contains("Path"))
-        //     {
-        //         currentLocation.VisitCount++;
+        public static void PathEvents(Place currentLocation, Party party, List<Character> characters)
+        {
+            int pathVisitor = 0;
+            if (currentLocation.Name.Contains("Path"))
+            {
+                currentLocation.VisitCount++;
 
-        //         if (currentLocation.VisitCount == 1)
-        //         {
-        //             Console.WriteLine("You see Andy watching TV. Want to see what he's watching? (Y/N)");
-        //             string watch = Console.ReadLine().ToLower();
-        //             if (watch == "y")
-        //             {
-        //                 Console.WriteLine("Oh no! It showed a dinosaur escaping from its pen and startled Andy. Now they're choking!");
-        //                 Console.WriteLine("Do you help Andy? (Y/N)");
-        //                 string help = Console.ReadLine().ToLower();
-        //                 if (help == "y")
-        //                 {
-        //                     Console.WriteLine("You save Andy! They are grateful to you and join your group.");
-        //                     party.GroupMembers.Add(characters.Find(person => person.Name == "Andy"));
-        //                 }
-        //                 else
-        //                 {
-        //                     Console.WriteLine("Andy survived without your help. But they don't like you and will not join your group. You're on your own.");
-        //                 }
-        //             }
-        //             else if (watch == "n")
-        //             {
-        //                 Console.WriteLine("You move on...");
-        //             }
-        //         }
-        //         else
-        //         {
-        //             RandomDinoAttack(party);
-        //         }
-        //     }
-        // }
+                if (currentLocation.VisitCount == 1)
+                {
+                    Random rnd = new Random();
+                    pathVisitor = rnd.Next(1,4);
+                }
+
+                Console.WriteLine("Your steps crunch on the pathway. They seem loud to your ears.");
+
+                if(currentLocation.Coordinates[0] == pathVisitor && party.GroupMembers.Find(person => person.Name == "Bobby") == null)
+                {
+                    Console.WriteLine("You hear something coming up behind you. You prepare yourself...");
+                    Console.WriteLine("\"Hi!\" -- You leap out of your skin, that's not what you were  prepared for.");
+                    Console.WriteLine("You found Bobby, another visitor, they have heard some weird stories and have decided to tag along.");
+                }
+                else
+                {
+                    RandomDinoAttack(party, new string[0]);
+                }
+            }
+        }
 
 
         public static void RandomDinoAttack(Party party, string[] dinoNames)
@@ -451,8 +442,6 @@ namespace Interactions
 
         public static List<Place> CreateLocations(){
 
-            // Scenario parkOpIntro = new Scenario("A big stegasaurus is being cared for by Sam; it fought with another stegasaurus and lost and needed help. It's nice, you can pet it if you want to.", "", "", "", "");
-            // Scenario stegasaurus = new Scenario("You moved too quickly and startled it! It swings its spiked tail at you!", "", "Visitor", "", "");
             // Scenario raptorPenIntroNoPaleo = new Scenario("This is the raptor pen.. You hear snarles from inside. Are you sure you want to go in?", "", "", "", "");
             // Scenario raptorPenIntroWPaleo = new Scenario("You enter the raptor pen but see no raptors, or even indications they are there.", "", "", "", "");
             // Scenario raptor = new Scenario("The velociraptors have surrounded you!", "", "Paleontologist", "Devan becomes the Alpha Raptor and sneaks you out of the surrounding raptor pack. You find the Pilot and add them to your party.", "You had found the Pilot, but they sacrificed themselves by running first.");
