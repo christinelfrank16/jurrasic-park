@@ -27,6 +27,7 @@ namespace Park
                 Place.ParkOperationsEvents(visitorLocation, party, characters);
                 Place.BoatDockEvents(visitorLocation, party);
                 Place.HeliPadEvents(visitorLocation, party);
+                Place.PathEvents(visitorLocation, party, characters);
                 // Other Event "Listeners"
                 gameOver = visitorLocation.CanLeave(party);
                 if(!gameOver)
