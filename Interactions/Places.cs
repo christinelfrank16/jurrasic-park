@@ -26,7 +26,7 @@ namespace Interactions
         {
             bool canLeave = false;
             List<string> items = partyGroup.GroupMembers[0].Backpack;
-            if(IsEndLocation){
+            if(IsEndLocation && items.Count > 0){
                 Character pilot = partyGroup.GroupMembers.Find(character => character.Specialty == "Pilot");
                 Character boatOp = partyGroup.GroupMembers.Find(character => character.Specialty == "Boat Operator");
                 Character hamRadioOp = partyGroup.GroupMembers.Find(character => character.Specialty == "Ham Radio Operator");
@@ -166,6 +166,75 @@ namespace Interactions
             }
         }
 
+        public static void HerbivorePenEvents(Place currentLocation, Party party, List<Character> characters)
+        {
+            if (currentLocation.Name == "Herbivore Pen")
+            {
+                currentLocation.VisitCount++;
+                // Scenario herbPenIntro = new Scenario("This is the herbivore pen. It should be safer.", "", "", "", "");
+                // Scenario plantAttack = new Scenario("You brushed against a poisonous plant and have a painful rash.", "Biologist", "");
+
+                if (currentLocation.VisitCount == 1)
+                {
+                    Character biologist = characters.Find(person => person.Specialty == "Biologist");
+                    Console.WriteLine("This is the herbivore pen. It should be safer.");
+                    Console.WriteLine("Do you want to look around? (Y/N)");
+                    string searchArea = Console.ReadLine().ToLower();
+                    if (searchArea == "y")
+                    {
+                        if (biologist != null)
+                        {
+                            Console.WriteLine("You start to walk past a harmless-looking plant, but Addisson quickly pulls you away from the danger they spotted.");
+                            Console.WriteLine("They inform you that you just avoided a nasty rash and hours of pain!");
+                            Console.WriteLine("After searching for a while, you hear a groan in the forest. Do you check it out? [Y/N]");
+                            string searchGroan = Console.ReadLine().ToLower();
+                            if (searchGroan== "y")
+                            {
+                                Console.WriteLine("You use a stick to pull back the leaves to reveal Taylor, curled in a fetal position and writhing in pain. They have a big rash.");
+                                Console.WriteLine("Addison applies a healing salve and Taylor joins your group. You learn that they shipped in and out of the park via a boat at the docks");
+                                party.GroupMembers.Add(characters.Find(person => person.Name == "Taylor"));
+                                
+                            }
+                            else
+                            {
+                                Console.WriteLine("You move on. Hopefully that writhing sound will distract predators from finding your party.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("You brushed against a poisonous plant and have a painful rash");
+                            party.GroupMembers[0].Attacked(1);
+                            Console.WriteLine("After searching for a while, you hear a groan in the forest. Do you check it out? [Y/N]");
+                            string searchGroan = Console.ReadLine().ToLower();
+                            if (searchGroan == "y")
+                            {
+                                Console.WriteLine("You foolishly pull back the leaves with your hands to reveal Taylor, curled in a fetal position and writhing in pain. Your rash worsens. You both have a big rash.");
+                                Console.WriteLine("Taylor joins your group. You learn that they shipped in and out of the park via a boat at the docks");
+                                party.GroupMembers.Add(characters.Find(person => person.Name == "Taylor"));
+
+                            }
+                            else
+                            {
+                                Console.WriteLine("You move on. Hopefully that writhing sound will distract predators from finding your party.");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("You can't see anything of value in your immediate vicinity.");
+                    }
+                }
+                else
+                {
+                    RandomDinoAttack(party, new string[0]);
+                    if (currentLocation.Item.Count > 1)
+                    {
+                        Console.WriteLine("There is something about this place... Something out of place...");
+                    }
+                }
+            }
+        }
+
         public static void RadioStationEvents(Place currentLocation, Party party)
         {
             if (currentLocation.Name == "HAM Radio Station")
@@ -289,7 +358,6 @@ namespace Interactions
             // Scenario plantAttack = new Scenario("You brushed against a poisonous plant and have a painful rash.", "Biologist", "");
             // Scenario heliIntro = new Scenario("A waiting helicoptor... Looks like it's ready to go, but you don't see any keys.", "", "", "", "");
             // Scenario boatIntro = new Scenario("The boat dock has an excellent view. You see a boat staged and waiting, but no one is around and you don't find any keys.", "", "", "", "");
-            // Scenario hamIntro = new Scenario("A special room to contact the outside world, but it's locked. You need park keys to get in.", "", "", "", "");
 
             Place visitorCenter = new Place("Visitor Center", 2, 0, "", false, new List<Scenario>(){});
             Place heliPad = new Place("Heli Pad", 0, 2, "", true, new List<Scenario>() {});

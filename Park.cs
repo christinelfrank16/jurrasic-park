@@ -23,6 +23,7 @@ namespace Park
                 Place.VisitorCenterEvents(visitorLocation, party, characters);
                 Place.UtilityBunkerEvents(visitorLocation, party, characters);
                 Place.RadioStationEvents(visitorLocation, party);
+                Place.HerbivorePenEvents(visitorLocation, party, characters);
                 // Other Event "Listeners"
                 gameOver = visitorLocation.CanLeave(party);
                 if(!gameOver)
